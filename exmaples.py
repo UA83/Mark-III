@@ -43,36 +43,17 @@ def find_movie(list_movies, movie_name):
     print('No such movie')
     return None
 
-
-#m1 = Movie('Spiderman', 2018)
-#m2 = Movie('Starwars', 2017)
-#movies = [m1, m2]
 movies = [Movie('Spiderman', 2018), Movie('Starwars', 2017), Movie('Ironman', 2015)]
-
-
-#u1 = User('John')
-#u2 = User('Ann')
-#users = [u1, u2]
 users = [User('John'), User('Ann'), User('Peter'), User('Mary')]
 
-u = find_user(users, 'Mary')
-print(u)
-
-#m = find_movie(movies, "Starwars")
-#print(m)
-
-#loan m1 to user1
-#u1.loan_movie(m1)
-
-#for m in movies:
-#    print(m)
-
-#for u in users:
-#    print(u)
 
 person_name = input('Enter person\'s name :')
 movie_name = input('Enter movie\'s name :')
+
+# find a user in a list of users
 p = find_user(users, person_name)
+print(p)
+
 m = find_movie(movies, movie_name)
 
 p.loan_movie(m)

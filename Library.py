@@ -29,7 +29,8 @@ def add_book():
     get_page_title('Add Book')
 
     # get the latest ID
-    last_id = get_latest_id()
+    last_id = get_book_last_id()
+    print(f' LAST ID:{last_id}')
 
     isbn = input(' Enter ISBN:')
     # get a list with all ISBNs in the library
@@ -50,15 +51,25 @@ def add_book():
     title = input(' Enter Title:')
 
     # Maybe add a validation here, name is name
-    author = input(' Enter Author:')
+    author_reg = "^[A-Za-z ]*[A-Za-z][A-Za-z ]*$"
+    flag = False
+    author = input(f' TIP >>> Only Letters and spaces are allowed for AUTHOR NAME.\n Enter Author Name:')
+    if check_string(author, author_reg):
+        flag = True
+
+    while not flag:
+        author = input(f' Author Name invalid\n Please Enter only letters and spaces:')
+        if check_string(author, author_reg):
+            flag = True
+
 
     # check if year is number and if it has 4 digits
     year = input(' Enter Year:')
-    while not year.isdigit() or len(year) != 4:
+    while not year.isdigit() or len(year) > 4:
         year = input(' Try Again, Enter Year:')
 
     # Use the latest ID and add 1 to it, e.g 10 + 1 = 11 < new ID to be used.
-    new_book = Book(str(int(last_id) + 1), title, year, isbn, author)
+    new_book = Book(str(int(last_id) + 1), title, year, isbn, author, 'No')
 
     list_of_book.append(new_book)
     print(new_book)
@@ -77,7 +88,6 @@ def borrow_book():
 
     print(b_index[1])
 
-
     # Get the user
     search_index = input(f' User ID:')
     u_index =  get_user_index(search_index)
@@ -89,9 +99,6 @@ def borrow_book():
     print('=========')
 
     print(f'The book: {list_of_book[b_index[2]].get_title()} has been borrowed by {list_users[u_index].get_name()}')
-
-
-
 
 
 # [3] Delete Book
@@ -148,17 +155,44 @@ def search_book():
     print(f' The total of: {total} {place_holder} found with the keyword [{to_search.upper()}]')
 
 
+
+
+
+
+
+
+
+
+
 # [7] Add User
 def add_user():
     get_page_title('Add User')
 
     # get the latest ID
-    last_id = get_latest_id('for_user')
-    print(type(last_id))
+    last_id = get_user_last_id()
 
-    # Add a check name? nahhhhh =============================================
-    name = input(' Enter Name:')
-    address = input(' Enter Address:')
+    name_reg = "^[A-Za-z ]*[A-Za-z][A-Za-z ]*$"
+    flag = False
+    name = input(f' TIP >>> Only Letters and spaces are allowed.\n Enter Name:')
+    if check_string(name,name_reg):
+        flag = True
+
+    while not flag:
+        name = input(f' Name invalid\n Please Enter only letters and spaces:')
+        if check_string(name, name_reg):
+            flag = True
+
+    addr_reg = "^[A-Za-z0-9 ,-]*[A-Za-z0-9][A-Za-z0-9 ,-]*$"
+    flag = False
+    address = input(f' TIP >>> Only Letters, Spaces, Commas(,) and Dashes(-) are allowed.\n Enter Address:')
+    if check_string(address, addr_reg):
+        flag = True
+
+    while not flag:
+        address = input(f' Name invalid\n Please Enter only Letters, Spaces, Commas(,) and Dashes(-):')
+        if check_string(address, addr_reg):
+            flag = True
+
     # Use the latest ID and add 1 to it, e.g 10 + 1 = 11 < new ID to be used.
     new_user = User(str(int(last_id) + 1), name, address)
 
@@ -183,7 +217,6 @@ def delete_user():
         if user_id.lower() != 'x':
             # Call method to get the user index in the list of users
             user_index = get_user_index(user_id)
-            print(user_index)
 
             if not check_del_user(user_index):
                 delete = input(f' ** Delete User{list_users[user_index].get_name()}** ? > [Y or N]')
@@ -200,8 +233,6 @@ def delete_user():
 
     else:
         print(USER_EMPTY)
-
-
 
 
 # [9] Display Users

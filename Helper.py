@@ -5,33 +5,58 @@ def get_page_title(page_title):
     print(' ' + page_title + '\n ' + len(page_title) * '=')
 
 
-# Get the latest ID used
-def get_latest_id(choice=None):
+def get_book_last_id():
+    # Getting all books ID
 
-    if list_users:
+    if list_of_book:
 
         list_of_ids = []
-        if choice == 'for_user':
-            for u in list_users:
-                list_of_ids.append(u.get_id())
+        for b in list_of_book:
+            list_of_ids.append(b.get_item_id())
+            print(b.get_item_id())
 
-        else:
-            # Getting all books ID
-            for b in list_of_book:
-                list_of_ids.append(b.get_item_id())
-
-            # Getting all Periodicals ID
-            for p in list_of_periodical:
-                list_of_ids.append(p.get_item_id())
-
-        # sort list, as the values are string, I am using (key=int) to sort it as integers.
-        list_of_ids.sort(key=int)
-
-        # Return the last value of the list, which is the highest number.
+            # sort list, as the values are string, I am using (key=int) to sort it as integers.
+            list_of_ids.sort(key=int)
 
     else:
         list_of_ids = ['0']
 
+    # Return the last value of the list, which is the highest number.
+    print(f'return{list_of_ids}')
+    return list_of_ids[-1]
+
+
+def get_periodical_last_id():
+    # Getting all Periodicals ID
+    if list_of_periodical:
+        list_of_ids = []
+        for p in list_of_periodical:
+            list_of_ids.append(p.get_item_id())
+
+        # sort list, as the values are string, I am using (key=int) to sort it as integers.
+        list_of_ids.sort(key=int)
+
+    else:
+        list_of_ids = ['0']
+
+    # Return the last value of the list, which is the highest number.
+    return list_of_ids[-1]
+
+# Get the latest ID used
+def get_user_last_id(choice=None):
+
+    if list_users:
+        list_of_ids = []
+
+        for u in list_users:
+            list_of_ids.append(u.get_id())
+
+        # sort list, as the values are string, I am using (key=int) to sort it as integers.
+        list_of_ids.sort(key=int)
+    else:
+        list_of_ids = ['0']
+
+    # Return the last value of the list, which is the highest number.
     return list_of_ids[-1]
 
 # Return a list with all ISBN in the Library
@@ -85,7 +110,12 @@ def check_del_user(user_index):
     # If user has any book borrowed, we can not delete it.
     if list_users[user_index].get_book_on_loan():
         rc = True
-        print(f'User can not be Deleted. User needs do bring back the following book: {list_users[user_index].get_book_on_loan()}')
+        print(f' User can not be Deleted. User needs do bring back the following book: {list_users[user_index].get_book_on_loan()}')
     else:
         rc = False
     return rc
+
+def check_string(word, reg):
+    import re
+    r = re.compile(reg)
+    return not r.match(word) is None
