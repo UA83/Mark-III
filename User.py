@@ -35,8 +35,6 @@ class User():
 		book._on_loan = True
 
 
-
-
 	def __str__(self):
 
 		# I am not sure if should slice the list here

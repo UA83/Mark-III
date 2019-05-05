@@ -24,9 +24,12 @@ list_of_periodical = [Periodical('35', 'How does it work?', '1983', 'Ulisses Mir
                       Periodical('88', 'Adventures of a dog called Suki', '2019', 'Stephanie Enders', '7', '456')]
 
 
+# # List of the Library's users
+# list_users = [User('4', 'Ulisses Alves', '1983 California Upper DB'),
+#               User('3', 'Stephanie Enders', '168 New York Corner DB'),
+#               User('5', 'Tony Stark', '10880 Malibu Point CL'),
+#               User('1', 'Ayrton Senna', '1993 Interlagos SP'),
+#               User('2', 'Joe Ramone', '315 Bowery Ny')]
+
 # List of the Library's users
-list_users = [User('4', 'Ulisses Alves', '1983 California Upper DB'),
-              User('3', 'Stephanie Enders', '168 New York Corner DB'),
-              User('5', 'Tony Stark', '10880 Malibu Point CL'),
-              User('1', 'Ayrton Senna', '1993 Interlagos SP'),
-              User('2', 'Joe Ramone', '315 Bowery Ny')]
+list_users = [User('4', 'Ulisses Alves', '1983 California Upper DB')]

@@ -1,4 +1,4 @@
-from items import *
+from Items import *
 
 # Print the title of the pager where the user is navigating.
 def get_page_title(page_title):
@@ -7,26 +7,32 @@ def get_page_title(page_title):
 
 # Get the latest ID used
 def get_latest_id(choice=None):
-    list_of_ids = []
-    if choice == 'for_user':
-        for u in list_users:
-            list_of_ids.append(u.get_id())
+
+    if list_users:
+
+        list_of_ids = []
+        if choice == 'for_user':
+            for u in list_users:
+                list_of_ids.append(u.get_id())
+
+        else:
+            # Getting all books ID
+            for b in list_of_book:
+                list_of_ids.append(b.get_item_id())
+
+            # Getting all Periodicals ID
+            for p in list_of_periodical:
+                list_of_ids.append(p.get_item_id())
+
+        # sort list, as the values are string, I am using (key=int) to sort it as integers.
+        list_of_ids.sort(key=int)
+
+        # Return the last value of the list, which is the highest number.
 
     else:
-        # Getting all books ID
-        for b in list_of_book:
-            list_of_ids.append(b.get_item_id())
+        list_of_ids = ['0']
 
-        # Getting all Periodicals ID
-        for p in list_of_periodical:
-            list_of_ids.append(p.get_item_id())
-
-    # sort list, as the values are string, I am using (key=int) to sort it as integers.
-    list_of_ids.sort(key=int)
-
-    # Return the last value of the list, which is the highest number.
     return list_of_ids[-1]
-
 
 # Return a list with all ISBN in the Library
 def get_isbns():
@@ -56,20 +62,15 @@ def check_book_available():
 
     return rc
 
-def get_user():
+def get_user_index(user_id):
     #u = input('Enter user ID who wants to borrow a book:')
     # do A while loop ????
-    search_user = input('Enter a user ID to borrow:')
-    get_user_index = ''
+    get_user_index = -1
     for u in list_users:
-        if u.get_id() == search_user:
+        if u.get_id() == user_id:
             get_user_index = list_users.index(u)
 
     return get_user_index
-
-
-def add_comma(list):
-    print(list)
 
 
 def get_book_index(book_id):
@@ -79,3 +80,12 @@ def get_book_index(book_id):
             get_index = list_of_book.index(b)
 
     return get_index
+
+def check_del_user(user_index):
+    # If user has any book borrowed, we can not delete it.
+    if list_users[user_index].get_book_on_loan():
+        rc = True
+        print(f'User can not be Deleted. User needs do bring back the following book: {list_users[user_index].get_book_on_loan()}')
+    else:
+        rc = False
+    return rc

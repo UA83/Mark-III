@@ -1,12 +1,11 @@
-from helper import *
-from items import list_users
-
+from Helper import *
 
 BOOK_ADDED = ' Book Added Successfully'
 BOOK_NOT_FOUND = ' Book Not Found'
 USER_ADDED = ' User Added Successfully'
 USER_DELETED = ' User Deleted Successfully'
 USER_NOT_FOUND = ' User Not Found'
+USER_EMPTY = ' *** There is no user in the System, start adding some ***'
 
 def display_menu():
 
@@ -80,7 +79,8 @@ def borrow_book():
 
 
     # Get the user
-    u_index =  get_user()
+    search_index = input(f' User ID:')
+    u_index =  get_user_index(search_index)
 
     # Borrow book
     list_users[u_index].borrow_book(list_of_book[b_index[2]])
@@ -154,7 +154,7 @@ def add_user():
 
     # get the latest ID
     last_id = get_latest_id('for_user')
-    print(last_id)
+    print(type(last_id))
 
     # Add a check name? nahhhhh =============================================
     name = input(' Enter Name:')
@@ -170,64 +170,103 @@ def add_user():
 # [8] Delete USer
 def delete_user():
     get_page_title('Delete User')
-    id = input(' === TIP --> if you do not know the user ID, press x to exit and chose option 4 from the menu to search the User ID. ===\n'
-               ' Enter User ID to be deleted:')
 
-    while not id.isdigit():
-        if id.lower() == 'x':
-            break
-        id = input(
-            '=== TIP --> if you do not know the user ID, press x to exit and chose option 4 from the menu to search '
-            'the User ID. ===\n '
-            ' Enter User ID to be deleted:')
+    if list_users:
+        user_id = input(' === TIP --> Deletion is done by USer ID, if you do not know the user ID, press x to exit and chose option 9 from the menu to search the User ID. ===\n'
+                   ' Enter User ID to be deleted:')
 
-    for u in list_users:
-        if u.get_id() == id:
-            get_index = list_users.index(u)
-            delete = input(f' ** Delete User{u}** ? | [Yes/No]')
-            # Add while loop here
-            if delete.lower() == 'yes':
-                print(f' User {u} Deleted Successfully')
-                del list_users[get_index]
-            else:
-                print(f' User {u} | User not Deleted')
-        else:
-            print('User not found')
+        while not user_id.isdigit() and user_id.lower() != 'x':
+            user_id = input(
+                ' === TIP --> Deletion is done by USer ID, if you do not know the user ID, press x to exit and chose option 9 from the menu to search the User ID. ===\n'
+                ' Enter User ID to be deleted:')
+
+        if user_id.lower() != 'x':
+            # Call method to get the user index in the list of users
+            user_index = get_user_index(user_id)
+            print(user_index)
+
+            if not check_del_user(user_index):
+                delete = input(f' ** Delete User{list_users[user_index].get_name()}** ? > [Y or N]')
+
+                # While user does not enter y or n, while loop keeps going
+                while delete.lower() not in ('y', 'n', 'x'):
+                    delete = input(f' Option invalid.\n Please to delete User {list_users[user_index].get_name()} enter [Y or N]')
+
+                if delete.lower() == 'y':
+                    print(f' User {list_users[user_index].get_name()} Deleted Successfully')
+                    del list_users[user_index]
+                else:
+                    print(f' User {list_users[user_index].get_name()} | User not Deleted')
+
+    else:
+        print(USER_EMPTY)
+
+
 
 
 # [9] Display Users
 def display_users():
     get_page_title('List of Users')
-    for u in list_users:
-        print(f'{u}\n')
+
+    if list_users:
+        for u in list_users:
+            print(f'{u}\n')
+    else:
+        print(USER_EMPTY)
 
 
 # [10] Search User
 def search_user():
     get_page_title('Search User')
 
-    to_search = input(' === TIP --> You can search User by ID, Name or Address. ==='
-                      '\n Please Enter a user data to be search:')
+    if list_users:
+        search_user = input(' === TIP --> You can search User by ID, Name or Address. ==='
+                          '\n Please Enter a user data to be search:')
 
-    list_of_users_found = []
-    for u in list_users:
-        if to_search.lower() in str(u.get_name()).lower() \
-                or to_search.lower() in str(u.get_id()).lower() \
-                or to_search.lower() in str(u.get_address()).lower():
-                    list_of_users_found.append(str(u))
+        list_of_users_found = []
+        for u in list_users:
+            if search_user.lower() in str(u.get_name()).lower() \
+                    or search_user.lower() in str(u.get_id()).lower() \
+                    or search_user.lower() in str(u.get_address()).lower():
+                        list_of_users_found.append(str(u))
 
-    if not list_of_users_found:
-        print(USER_NOT_FOUND)
+        if not list_of_users_found:
+            print(USER_NOT_FOUND)
+        else:
+            for u in list_of_users_found:
+                print(u)
+        total = len(list_of_users_found)
+
+        place_holder = 'user'
+        if total != 1:
+            place_holder = 'users'
+
+        print(f' The total of: {total} {place_holder} found with the keyword [{search_user.upper()}]')
+
     else:
-        for u in list_of_users_found:
-            print(u)
-    total = len(list_of_users_found)
+        print(USER_EMPTY)
 
-    place_holder = 'user'
-    if total != 1:
-        place_holder = 'users'
 
-    print(f' The total of: {total} {place_holder} found with the keyword [{to_search.upper()}]')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # [11] Add Periodical
