@@ -38,14 +38,22 @@ def add_book():
 
     # Check if it is used
     is_isbn_used = check_isbn(l_isbn, isbn)
-    print(is_isbn_used)
+    #print(is_isbn_used)
 
     # check if isbn is number, the length and if it is already used
     while not isbn.isdigit() or len(isbn) != 13 or is_isbn_used:
-        isbn = input(' Try again, Enter ISBN:')
+        # Print different error message to the user according to the input.
+        if is_isbn_used:
+            isbn = input(f' Try again, ISBN already in use\n Enter ISBN:')
+        elif not isbn.isdigit():
+            isbn = input(f' Try again, ISBN has to be only numbers\n Enter ISBN:')
+        elif isbn != 13:
+            isbn = input(f' Try again, ISBN has to have exactly 13 Digits\n Enter ISBN:')
+        else:
+            isbn = input(f' Try again,\n Enter ISBN:')
+
         l_isbn = get_isbns()
         is_isbn_used = check_isbn(l_isbn, isbn)
-        print(is_isbn_used)
 
     # title can contain different characters
     title = input(' Enter Title:')
@@ -63,7 +71,8 @@ def add_book():
             flag = True
 
 
-    # check if year is number and if it has 4 digits
+    # check if year is number and if it has 4 digits or less
+    # Allowing very old books, eg from the year: 989
     year = input(' Enter Year:')
     while not year.isdigit() or len(year) > 4:
         year = input(' Try Again, Enter Year:')
@@ -71,6 +80,7 @@ def add_book():
     # Use the latest ID and add 1 to it, e.g 10 + 1 = 11 < new ID to be used.
     new_book = Book(str(int(last_id) + 1), title, year, isbn, author, 'No')
 
+    # Append new object Book to the list of books
     list_of_book.append(new_book)
     print(new_book)
     print(BOOK_ADDED)
@@ -80,8 +90,10 @@ def add_book():
 def borrow_book():
     get_page_title('Borrow Book')
 
+    search_book = input(f' Ckeck if the book is available to borrow:')
+
     # Find if book is available
-    b_index = check_book_available()
+    b_index = check_book_available(search_book)
     while b_index[0] == 'No':
         print(b_index[1])
         b_index = check_book_available()
@@ -105,13 +117,75 @@ def borrow_book():
 def delete_book():
     get_page_title('Delete Book')
 
-    x = check_book_available()
-    print(x)
+    # search_book = input(f' Enter book ID to be deleted:')
+    #
+    # x = check_book_available(search_book)
+    # print(x)
+    #
+    # book_id = input('Enter Book ID')
+    # y = get_book_index(book_id)
+    #
+    # print(y)
 
-    book_id = input('Enter Book ID')
-    y = get_book_index(book_id)
 
-    print(y)
+    if list_of_book:
+        search_book = input(' === TIP --> Deletion is done by book ID, if you do not know the book ID, press x to exit and chose option 4 from the menu to Display Books. ===\n'
+                   ' Enter Book ID to be deleted:')
+
+        while not search_book.isdigit() and search_book.lower() != 'x':
+            search_book = input(
+                ' === TIP --> Deletion is done by book ID, if you do not know the book ID, press x to exit and chose option 4 from the menu to Display Books. ===\n'
+                ' Enter Book ID to be deleted:')
+
+        if search_book.lower() != 'x':
+            # Call method to get the user index in the list of users
+            book_index = get_book_index(search_book)
+
+            if book_index != '':
+                if not check_del_book(book_index):
+                    delete = input(f' ** Delete Book {list_of_book[book_index].get_title()}** ? > [Y or N]')
+
+                    # While user does not enter y or n, while loop keeps going
+                    while delete.lower() not in ('y', 'n', 'x'):
+                        delete = input(f' Option invalid.\n Please to delete A book {list_of_book[book_index].get_title()} enter [Y or N]')
+
+                    if delete.lower() == 'y':
+                        print(f' Book {list_of_book[book_index].get_title()} Deleted Successfully')
+                        del list_of_book[book_index]
+                    else:
+                        print(f' Book {list_of_book[book_index].get_title()} not Deleted')
+            else:
+                print(f' Book Index not found')
+
+    else:
+        print(USER_EMPTY)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # [4] Display Books
@@ -218,18 +292,23 @@ def delete_user():
             # Call method to get the user index in the list of users
             user_index = get_user_index(user_id)
 
-            if not check_del_user(user_index):
-                delete = input(f' ** Delete User{list_users[user_index].get_name()}** ? > [Y or N]')
+            if user_index != '':
 
-                # While user does not enter y or n, while loop keeps going
-                while delete.lower() not in ('y', 'n', 'x'):
-                    delete = input(f' Option invalid.\n Please to delete User {list_users[user_index].get_name()} enter [Y or N]')
+                if not check_del_user(user_index):
+                    delete = input(f' ** Delete User {list_users[user_index].get_name()}** ? > [Y or N]')
 
-                if delete.lower() == 'y':
-                    print(f' User {list_users[user_index].get_name()} Deleted Successfully')
-                    del list_users[user_index]
-                else:
-                    print(f' User {list_users[user_index].get_name()} | User not Deleted')
+                    # While user does not enter y or n, while loop keeps going
+                    while delete.lower() not in ('y', 'n', 'x'):
+                        delete = input(f' Option invalid.\n Please to delete User {list_users[user_index].get_name()} enter [Y or N]')
+
+                    if delete.lower() == 'y':
+                        print(f' User {list_users[user_index].get_name()} Deleted Successfully')
+                        del list_users[user_index]
+                    else:
+                        print(f' User {list_users[user_index].get_name()} User not Deleted')
+
+            else:
+                print(f' User ID not found')
 
     else:
         print(USER_EMPTY)

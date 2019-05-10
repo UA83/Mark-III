@@ -13,7 +13,6 @@ def get_book_last_id():
         list_of_ids = []
         for b in list_of_book:
             list_of_ids.append(b.get_item_id())
-            print(b.get_item_id())
 
             # sort list, as the values are string, I am using (key=int) to sort it as integers.
             list_of_ids.sort(key=int)
@@ -22,7 +21,6 @@ def get_book_last_id():
         list_of_ids = ['0']
 
     # Return the last value of the list, which is the highest number.
-    print(f'return{list_of_ids}')
     return list_of_ids[-1]
 
 
@@ -74,8 +72,7 @@ def check_isbn(list_isbn,  check_isbn):
         return True
     return False
 
-def check_book_available():
-    search_book = input(f' Ckeck if the book is available to borrow:')
+def check_book_available(search_book):
     rc = ['No', ' Book not in the system', -1]
     for b in list_of_book:
         if b.get_item_id() == search_book :
@@ -90,7 +87,7 @@ def check_book_available():
 def get_user_index(user_id):
     #u = input('Enter user ID who wants to borrow a book:')
     # do A while loop ????
-    get_user_index = -1
+    get_user_index = ''
     for u in list_users:
         if u.get_id() == user_id:
             get_user_index = list_users.index(u)
@@ -99,7 +96,7 @@ def get_user_index(user_id):
 
 
 def get_book_index(book_id):
-    get_index = -1
+    get_index = ''
     for b in list_of_book:
         if b.get_item_id() == book_id:
             get_index = list_of_book.index(b)
@@ -114,6 +111,18 @@ def check_del_user(user_index):
     else:
         rc = False
     return rc
+
+def check_del_book(book_index):
+    # If any book is borrowed, we can not delete it.
+    print(f'   {list_of_book[book_index].get_on_loan()}\n====')
+    if list_of_book[book_index].get_on_loan() != 'No':
+        rc = True
+        print(f' Book can not be Deleted.\n'
+              f' The User {list_of_book[book_index].get_on_loan()} needs do bring it back before delete the book from the system')
+    else:
+        rc = False
+    return rc
+
 
 def check_string(word, reg):
     import re
