@@ -91,38 +91,41 @@ def borrow_book():
     get_page_title('Borrow Book')
     # get book index first get_book_index
 
-    search_book = input(f' Check if the book is available to borrow:')
-    book_index = get_book_index(search_book)
-    print(f' {book_index} <<<<<<')
 
-    if book_index != '':
-        # Find if book is available
-        print(f' {check_book_available(search_book)} <<<')
-        b_index = check_book_available(search_book)
-        while b_index[0] == 'No':
+    flag_b, flag_u = False, False
+
+    while not flag_b:
+        search_book = input(f' Check if the book is available to borrow.\n Enter Book ID:')
+        book_index = get_book_index(search_book)
+
+        if book_index != '':
+            # Find if book is available
+            print(f' {check_book_available(search_book)} <<<')
+            b_index = check_book_available(search_book)
+            while b_index[0] == 'No':
+                print(b_index[1])
+                b_index = check_book_available()
+
             print(b_index[1])
-            b_index = check_book_available()
+            flag_b = True
+        else:
+            print(f' Book ID not found, try again.')
 
-        print(b_index[1])
+    while not flag_u:
+        # Get the user
+        search_index = input(f' Enter User ID to borrow: {list_of_book[b_index[2]].get_title()} ')
+        u_index =  get_user_index(search_index)
 
-    else:
-        print(f' I am lost')
+        if u_index != '':
+            # Borrow book
+            list_users[u_index].borrow_book(list_of_book[b_index[2]])
+            # Update book stock
+            list_of_book[b_index[2]].set_on_loan(list_users[u_index].get_name())
+            print(f' Book {list_of_book[b_index[2]].get_title()} has been borrowed by {list_users[u_index].get_name()}')
+            flag_u = True
 
-    # Get the user
-    search_index = input(f' User ID:')
-    u_index =  get_user_index(search_index)
-
-    if u_index != '':
-        # Borrow book
-        list_users[u_index].borrow_book(list_of_book[b_index[2]])
-        # Update book stock
-        list_of_book[b_index[2]].set_on_loan(list_users[u_index].get_name())
-        print('=========')
-
-        print(f'The book: {list_of_book[b_index[2]].get_title()} has been borrowed by {list_users[u_index].get_name()}')
-
-    else:
-        print(f' User index not found')
+        else:
+            print(f' User index not found')
 
 
 # [3] Delete Book
