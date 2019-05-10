@@ -73,7 +73,7 @@ def check_isbn(list_isbn,  check_isbn):
     return False
 
 def check_book_available(search_book):
-    rc = ['No', ' Book not in the system', -1]
+    rc = ['No', ' Book not in the system', '']
     for b in list_of_book:
         if b.get_item_id() == search_book :
 
@@ -106,21 +106,21 @@ def get_book_index(book_id):
 def check_del_user(user_index):
     # If user has any book borrowed, we can not delete it.
     if list_users[user_index].get_book_on_loan():
-        rc = True
+        rc = False
         print(f' User can not be Deleted. User needs do bring back the following book: {list_users[user_index].get_book_on_loan()}')
     else:
-        rc = False
+        rc = True
     return rc
 
 def check_del_book(book_index):
     # If any book is borrowed, we can not delete it.
     print(f'   {list_of_book[book_index].get_on_loan()}\n====')
     if list_of_book[book_index].get_on_loan() != 'No':
-        rc = True
+        rc = False
         print(f' Book can not be Deleted.\n'
               f' The User {list_of_book[book_index].get_on_loan()} needs do bring it back before delete the book from the system')
     else:
-        rc = False
+        rc = True
     return rc
 
 

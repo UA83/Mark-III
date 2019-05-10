@@ -89,44 +89,45 @@ def add_book():
 # [2] Borrow Book
 def borrow_book():
     get_page_title('Borrow Book')
+    # get book index first get_book_index
 
-    search_book = input(f' Ckeck if the book is available to borrow:')
+    search_book = input(f' Check if the book is available to borrow:')
+    book_index = get_book_index(search_book)
+    print(f' {book_index} <<<<<<')
 
-    # Find if book is available
-    b_index = check_book_available(search_book)
-    while b_index[0] == 'No':
+    if book_index != '':
+        # Find if book is available
+        print(f' {check_book_available(search_book)} <<<')
+        b_index = check_book_available(search_book)
+        while b_index[0] == 'No':
+            print(b_index[1])
+            b_index = check_book_available()
+
         print(b_index[1])
-        b_index = check_book_available()
 
-    print(b_index[1])
+    else:
+        print(f' I am lost')
 
     # Get the user
     search_index = input(f' User ID:')
     u_index =  get_user_index(search_index)
 
-    # Borrow book
-    list_users[u_index].borrow_book(list_of_book[b_index[2]])
-    # Update book stock
-    list_of_book[b_index[2]].set_on_loan(list_users[u_index].get_name())
-    print('=========')
+    if u_index != '':
+        # Borrow book
+        list_users[u_index].borrow_book(list_of_book[b_index[2]])
+        # Update book stock
+        list_of_book[b_index[2]].set_on_loan(list_users[u_index].get_name())
+        print('=========')
 
-    print(f'The book: {list_of_book[b_index[2]].get_title()} has been borrowed by {list_users[u_index].get_name()}')
+        print(f'The book: {list_of_book[b_index[2]].get_title()} has been borrowed by {list_users[u_index].get_name()}')
+
+    else:
+        print(f' User index not found')
 
 
 # [3] Delete Book
 def delete_book():
     get_page_title('Delete Book')
-
-    # search_book = input(f' Enter book ID to be deleted:')
-    #
-    # x = check_book_available(search_book)
-    # print(x)
-    #
-    # book_id = input('Enter Book ID')
-    # y = get_book_index(book_id)
-    #
-    # print(y)
-
 
     if list_of_book:
         search_book = input(' === TIP --> Deletion is done by book ID, if you do not know the book ID, press x to exit and chose option 4 from the menu to Display Books. ===\n'
@@ -142,7 +143,7 @@ def delete_book():
             book_index = get_book_index(search_book)
 
             if book_index != '':
-                if not check_del_book(book_index):
+                if check_del_book(book_index):
                     delete = input(f' ** Delete Book {list_of_book[book_index].get_title()}** ? > [Y or N]')
 
                     # While user does not enter y or n, while loop keeps going
@@ -294,7 +295,7 @@ def delete_user():
 
             if user_index != '':
 
-                if not check_del_user(user_index):
+                if check_del_user(user_index):
                     delete = input(f' ** Delete User {list_users[user_index].get_name()}** ? > [Y or N]')
 
                     # While user does not enter y or n, while loop keeps going
