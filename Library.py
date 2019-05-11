@@ -6,7 +6,7 @@ def display_menu():
     print(' -------------------------------------------------------------------------------------------------')
     print(' |                                         Library System                                        |')
     print(' -------------------------------------------------------------------------------------------------')
-    print(' |----- Books                    |----- Users                    |----- Periodicals              |')
+    print(' |---- Books                     |---- Users                     |---- Periodicals               |')
     print(' | 1.  Add Book                  | 7.  Add User                  | 11. Add Periodical            |')
     print(' | 2.  Borrow Book               | 8.  Delete User               | 12. Delete Periodical         |')
     print(' | 3.  Delete Book               | 9.  Display Users             | 13. Display Periodicals       |')
@@ -89,8 +89,8 @@ def borrow_book():
         book_index = get_book_index(search_book)
 
         if book_index != '':
+
             # Find if book is available
-            print(f' {check_book_available(search_book)} <<<')
             b_index = check_book_available(search_book)
 
             if b_index[0] == 'No':
@@ -104,8 +104,9 @@ def borrow_book():
 
     while not flag_u:
         # Get the user
-        search_index = input(f' To borrow the book {list_of_book[b_index[2]].get_title()},\n'
-                             f' Enter user ID')
+        print(f' Book available')
+        search_index = input(f' To borrow the book: {list_of_book[b_index[2]].get_title()},\n'
+                             f' Enter user ID who will borrow the book:')
         u_index = get_user_index(search_index)
 
         if u_index != '':
@@ -125,12 +126,12 @@ def delete_book():
     get_page_title('Delete Book')
 
     if list_of_book:
-        search_book = input(f' === TIP --> Deletion is done by book ID, if you do not know the book ID, press x to'
+        search_book = input(f' TIP >>> Deletion is done by book ID, if you do not know the book ID, press x to'
                             f' exit and chose option 4 from the menu to Display Books. ===\n'
                             f' Enter Book ID to be deleted:')
 
         while not search_book.isdigit() and search_book.lower() != 'x':
-            search_book = input(f' === TIP --> Deletion is done by book ID, if you do not know the book ID, '
+            search_book = input(f' TIP >>> Deletion is done by book ID, if you do not know the book ID, '
                                 f'press x to exit and choose option 4 from the menu to Display Books. ===\n'
                                 f' Enter Book ID to be deleted:')
 
@@ -140,7 +141,7 @@ def delete_book():
 
             if book_index != '':
                 if check_del_book(book_index):
-                    delete = input(f' ** Delete Book {list_of_book[book_index].get_title()}** ? > [Y or N]')
+                    delete = input(f' ** Delete Book {list_of_book[book_index].get_title()} ** ? > [Y or N]')
 
                     # While user does not enter y or n, while loop keeps going
                     while delete.lower() not in ('y', 'n', 'x'):
@@ -179,8 +180,6 @@ def return_book():
         search_index = input(f' Enter User ID to Return:')
         u_index = get_user_index(search_index)
 
-        print(f'[{u_index}]')
-
         if u_index != '':
             borrow_list = list_users[u_index].get_book_on_loan()
             flag_u = True
@@ -189,24 +188,27 @@ def return_book():
             print(f' User index not found')
 
     book_index = None
-    while not flag_b:
-        search_book = input(f' Enter book ID to be returned:')
+    search_book = ''
+    while not flag_b and search_book.lower() != 'x':
+        search_book = input(f' TIP >>> Press [x] if you need to exit\n'
+                            f' Enter book ID to be returned:')
         book_index = get_book_index(search_book)
 
-        print(f'[{book_index}]')
-
-        if book_index != '':
+        if book_index != '' and search_book.lower() != 'x':
             if list_of_book[book_index].get_title() in borrow_list:
                 flag_b = True
             else:
-                print(f' User does not have this book ID\n Try Again:')
+                print(f' User does not have this book ID')
 
         else:
-            print(f' Book ID not found, try again.')
+            print(f' Book ID not found or not available to be returned, try again.')
 
-    list_users[u_index].return_book(list_of_book[book_index].get_title())
-    list_of_book[book_index].set_on_loan('No')
-    print(f' Book returned successfully')
+    if search_book.lower() != 'x':
+        list_users[u_index].return_book(list_of_book[book_index].get_title())
+        list_of_book[book_index].set_on_loan('No')
+        print(f' Book returned successfully')
+    else:
+        print(f' Exit Successfully')
 
 
 # [6] Search Book

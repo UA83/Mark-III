@@ -129,7 +129,6 @@ def check_del_user(user_index):
 
 def check_del_book(book_index):
     # If any book is borrowed, we can not delete it.
-    print(f'   {list_of_book[book_index].get_on_loan()}\n====')
     if list_of_book[book_index].get_on_loan() != 'No':
         rc = False
         print(f' Book can not be Deleted.\n'

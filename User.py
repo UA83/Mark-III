@@ -19,7 +19,6 @@ class User:
 	def get_book_on_loan(self):
 		return self._books_on_loan
 
-	# Should I have this option here? I dont think so. but just for the sake I will leave it here
 	def set_id(self, id):
 		self._id = id
 
