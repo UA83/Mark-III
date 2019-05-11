@@ -22,6 +22,10 @@ class User():
         self._movie.append(m)
         m._onloan = True
 
+    def remove_movie(self, m):
+        self._movie.append(m)
+        m._onloan = True
+
     def __str__(self):
         return 'Name: '+self._name+' Movies on loan: '+ str(self._movie)
 

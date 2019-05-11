@@ -78,7 +78,7 @@ def check_book_available(search_book):
         if b.get_item_id() == search_book :
 
             if b.get_on_loan() != 'No':
-                rc = ['No', ' Book Already Borrowed\n Try again', -1]
+                rc = ['No', ' Book Already Borrowed\n Try again', '']
             else:
                 rc = ['True', ' Book Available', list_of_book.index(b)]
 
@@ -100,6 +100,14 @@ def get_book_index(book_id):
     for b in list_of_book:
         if b.get_item_id() == book_id:
             get_index = list_of_book.index(b)
+
+    return get_index
+
+def get_periodical_index(periodical_id):
+    get_index = ''
+    for b in list_of_periodical:
+        if b.get_item_id() == periodical_id:
+            get_index = list_of_periodical.index(b)
 
     return get_index
 

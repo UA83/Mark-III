@@ -31,7 +31,7 @@ class Periodical(LibraryItem):
 		self._issue = issue
 
 	def __str__(self):
-		return f'ID:{self.get_item_id()},' \
+		return f' ID:{self.get_item_id()},' \
 			f' Editor:{self.get_editor()},' \
 			f' Title:{self.get_title()},' \
 			f' Volume:{self.get_volume()},' \

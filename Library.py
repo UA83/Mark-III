@@ -93,7 +93,7 @@ def borrow_book():
 
 
     flag_b, flag_u = False, False
-
+    b_index = []
     while not flag_b:
         search_book = input(f' Check if the book is available to borrow.\n Enter Book ID:')
         book_index = get_book_index(search_book)
@@ -102,18 +102,20 @@ def borrow_book():
             # Find if book is available
             print(f' {check_book_available(search_book)} <<<')
             b_index = check_book_available(search_book)
-            while b_index[0] == 'No':
-                print(b_index[1])
-                b_index = check_book_available()
 
-            print(b_index[1])
-            flag_b = True
+            if b_index[0] == 'No':
+                print(b_index[1])
+                flag_b = False
+            else:
+                flag_b = True
+
         else:
             print(f' Book ID not found, try again.')
 
     while not flag_u:
         # Get the user
-        search_index = input(f' Enter User ID to borrow: {list_of_book[b_index[2]].get_title()} ')
+        search_index = input(f' To borrow the book {list_of_book[b_index[2]].get_title()},\n'
+                             f' Enter user ID')
         u_index =  get_user_index(search_index)
 
         if u_index != '':
@@ -165,33 +167,6 @@ def delete_book():
         print(USER_EMPTY)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # [4] Display Books
 def display_books():
     get_page_title('Display Books')
@@ -202,6 +177,55 @@ def display_books():
 # [5] Return Book
 def return_book():
     get_page_title('Return Book')
+
+    flag_b, flag_u = False, False
+
+    borrow_list = []
+    u_index = None
+    while not flag_u:
+        # Get the user
+        search_index = input(f' Enter User ID to Return:')
+        u_index =  get_user_index(search_index)
+
+        print(f'[{u_index}]')
+
+        if u_index != '':
+            borrow_list = list_users[u_index].get_book_on_loan()
+            flag_u = True
+
+        else:
+            print(f' User index not found')
+
+    book_index = None
+    while not flag_b:
+        search_book = input(f' Enter book ID to be returned:')
+        book_index = get_book_index(search_book)
+
+        print(f'[{book_index}]')
+
+        if book_index != '':
+            if list_of_book[book_index].get_title() in borrow_list:
+                flag_b = True
+            else:
+                print(f' User does not have this book ID\n Try Again:')
+
+        else:
+            print(f' Book ID not found, try again.')
+
+    list_users[u_index].return_book(list_of_book[book_index].get_title())
+    list_of_book[book_index].set_on_loan('No')
+    print(f' Book returned successfully')
+
+
+
+
+
+
+
+
+
+
+
 
 
 # [6] Search Book
@@ -348,7 +372,7 @@ def search_user():
             print(USER_NOT_FOUND)
         else:
             for u in list_of_users_found:
-                print(u)
+                print(f'{u}')
         total = len(list_of_users_found)
 
         place_holder = 'user'
@@ -387,20 +411,142 @@ def search_user():
 def add_periodical():
     get_page_title('Add Periodical')
 
+    # get the latest ID
+    last_id = get_periodical_last_id()
+
+    editor_reg = "^[A-Za-z ]*[A-Za-z][A-Za-z ]*$"
+    flag = False
+    editor = input(f' TIP >>> Only Letters and spaces are allowed.\n Enter Editor:')
+    if check_string(editor,editor_reg):
+        flag = True
+
+    while not flag:
+        editor = input(f' Editor invalid\n Please Enter only letters and spaces:')
+        if check_string(editor, editor_reg):
+            flag = True
+
+    # title can contain different characters
+    title = input(f' Enter Title:')
+
+    # check if year is number and if it has 4 digits or less
+    # Allowing very old books, eg from the year: 989
+    year = input(f' TIP >>> Year can have max. 4 digits\n'
+                 f' Enter Year:')
+    while not year.isdigit() or len(year) > 4:
+        year = input(' Try Again, Enter Year:')
+
+    volume = input(f' TIP >>> Volume can have max. 6 digits\n'
+                   f' Enter volume:')
+    while not volume.isdigit() or len(volume) > 6:
+        volume = input(' Try Again, Enter Volume number:')
+
+    issue = input(f' TIP >>> Issue can have max. 6 digits\n'
+                   f' Enter Issue:')
+    while not issue.isdigit() or len(issue) > 6:
+        issue = input(f' Try Again, Enter Issue number:')
+
+
+    # Use the latest ID and add 1 to it, e.g 10 + 1 = 11 < new ID to be used.
+    new_periodical = Periodical(str(int(last_id) + 1), title, year, editor, volume, issue)
+
+    list_of_periodical.append(new_periodical)
+    print(new_periodical)
+    print(f' User Added Successfully')
+
+
 
 # [12] Delete Periodical
 def delete_periodical():
     get_page_title('Delete Periodical')
+
+    if list_of_periodical:
+        p_id = input(f' === TIP --> Deletion is done by Periodical ID, if you do not know the periocal ID,'
+                     f' press x to exit and choose option 13 from the menu to Display Periodicals. ===\n'
+                     f' Enter Periodical ID to be deleted:')
+
+        while not p_id.isdigit() and p_id.lower() != 'x':
+            p_id = input(f' === TIP --> Deletion is done by Periodical ID, if you do not know the periocal ID,'
+                         f' press x to exit and choose option 13 from the menu to Display Periodicals. ===\n'
+                         f' Enter Periodical ID to be deleted:')
+
+        if p_id.lower() != 'x':
+            # Call method to get the user index in the list of users
+            p_index = get_periodical_index(p_id)
+
+            if p_index != '':
+
+                delete = input(f' ** Delete Periodical {list_of_periodical[p_index].get_title()}** ? > [Y or N]')
+
+                # While user does not enter y or n, while loop keeps going
+                while delete.lower() not in ('y', 'n', 'x'):
+                    delete = input(f' Option invalid.\n Please to delete Periodical {list_of_periodical[p_index].get_title()} enter [Y or N]')
+
+                if delete.lower() == 'y':
+                    print(f' Periodical {list_of_periodical[p_index].get_title()} Deleted Successfully')
+                    del list_of_periodical[p_index]
+                else:
+                    print(f' Periodical {list_of_periodical[p_index].get_title()} not Deleted')
+
+            else:
+                print(f' Periodical ID not found')
+
+    else:
+        print(f' *** There is no Periodical in the System, start adding some ***')
+
+
+
+
+
+
+
+
+
+
+
 
 
 # [13] Display Periodicals
 def display_periodicals():
     get_page_title('Display Periodicals')
 
+    if list_of_periodical:
+        for p in list_of_periodical:
+            print(f' {p}\n')
+    else:
+        print(' *** There is no periodical in the System, start adding some ***')
 
 # [14] Search Periodical
 def search_periodical():
     get_page_title('Search Periodical')
+    if list_of_periodical:
+        search_periodical = input(' === TIP --> You can search Periodical by ID, Editor, Title, Volume, Year or Issue. ==='
+                          '\n Please Enter a periodical data to be search:')
+
+        list_of_periodicals_found = []
+        for p in list_of_periodical:
+            if search_periodical.lower() in str(p.get_editor()).lower() \
+                    or search_periodical.lower() in str(p.get_title()).lower() \
+                    or search_periodical.lower() in str(p.get_volume()).lower() \
+                    or search_periodical.lower() in str(p.get_year()).lower() \
+                    or search_periodical.lower() in str(p.get_issue()).lower() \
+                    or search_periodical.lower() in str(p.get_item_id()).lower():
+                        list_of_periodicals_found.append(str(p))
+
+        if not list_of_periodicals_found:
+            print(f' Periodical Not Found')
+        else:
+            for p in list_of_periodicals_found:
+                print(f'{p}')
+        total = len(list_of_periodicals_found)
+
+        place_holder = 'periodical'
+        if total != 1:
+            place_holder = 'periodicals'
+
+        print(f' The total of: {total} {place_holder} found with the keyword [{search_periodical.upper()}]')
+    else:
+        print(f' Periodical Not Found')
+
 
 
 def menu_control():

@@ -29,11 +29,12 @@ class User():
 	def set_address(self, address):
 		self._address = address
 
-
 	def borrow_book(self, book):
 		self._books_on_loan.append(book.get_title())
 		book._on_loan = True
 
+	def return_book(self, book):
+		self._books_on_loan.remove(book)
 
 	def __str__(self):
 
