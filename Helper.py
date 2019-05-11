@@ -76,6 +76,7 @@ def check_isbn(list_isbn, check_isbn):
     return False
 
 
+# Before book is borrowed, check if it is available/not borrowed
 def check_book_available(search_book):
     rc = ['No', ' Book not in the system', '']
     for b in list_of_book:
@@ -89,6 +90,7 @@ def check_book_available(search_book):
     return rc
 
 
+# Get index using ID
 def get_user_index(user_id):
     get_user_index = ''
     for u in list_users:
@@ -98,6 +100,7 @@ def get_user_index(user_id):
     return get_user_index
 
 
+# Get index using ID
 def get_book_index(book_id):
     get_index = ''
     for b in list_of_book:
@@ -107,6 +110,7 @@ def get_book_index(book_id):
     return get_index
 
 
+# Get index using ID
 def get_periodical_index(periodical_id):
     get_index = ''
     for b in list_of_periodical:
@@ -116,6 +120,7 @@ def get_periodical_index(periodical_id):
     return get_index
 
 
+# Before delete, need to check if user has borrowed any book
 def check_del_user(user_index):
     # If user has any book borrowed, we can not delete it.
     if list_users[user_index].get_book_on_loan():
@@ -126,7 +131,7 @@ def check_del_user(user_index):
         rc = True
     return rc
 
-
+# Before delete, I need to check if this book is borrowed
 def check_del_book(book_index):
     # If any book is borrowed, we can not delete it.
     if list_of_book[book_index].get_on_loan() != 'No':
@@ -138,7 +143,7 @@ def check_del_book(book_index):
         rc = True
     return rc
 
-
+# Check if is string with regex
 def check_string(word, reg):
     import re
     r = re.compile(reg)
