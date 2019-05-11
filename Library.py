@@ -84,6 +84,7 @@ def borrow_book():
     # get book index first get_book_index
     flag_b, flag_u = False, False
     b_index = []
+
     while not flag_b:
         search_book = input(f' Check if the book is available to borrow.\n Enter Book ID:')
         book_index = get_book_index(search_book)
