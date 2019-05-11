@@ -6,8 +6,6 @@ from User import User
 from Book import Book
 from Periodical import Periodical
 
-
-
 # List of books
 list_of_book = [Book('1', 'A Game of Thrones', '1996', '9780553573404', 'George R. R. Martin', 'No'),
                 Book('12', 'A Clash of Kings', '1998', '9753407447831', 'George R. R. Martin', 'No'),
@@ -30,4 +28,3 @@ list_users = [User('4', 'Ulisses Alves', '1983 California Upper DB'),
               User('5', 'Tony Stark', '10880 Malibu Point CL'),
               User('1', 'Ayrton Senna', '1993 Interlagos SP'),
               User('2', 'Joe Ramone', '315 Bowery Ny')]
-

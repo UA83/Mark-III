@@ -1,4 +1,3 @@
-
 class LibraryItem:
 	def __init__(self, item_id, title, year):
 		self._item_id = item_id

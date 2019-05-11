@@ -1,11 +1,5 @@
 from Helper import *
 
-BOOK_ADDED = ' Book Added Successfully'
-BOOK_NOT_FOUND = ' Book Not Found'
-USER_ADDED = ' User Added Successfully'
-USER_DELETED = ' User Deleted Successfully'
-USER_NOT_FOUND = ' User Not Found'
-USER_EMPTY = ' *** There is no user in the System, start adding some ***'
 
 def display_menu():
 
@@ -38,7 +32,6 @@ def add_book():
 
     # Check if it is used
     is_isbn_used = check_isbn(l_isbn, isbn)
-    #print(is_isbn_used)
 
     # check if isbn is number, the length and if it is already used
     while not isbn.isdigit() or len(isbn) != 13 or is_isbn_used:
@@ -70,7 +63,6 @@ def add_book():
         if check_string(author, author_reg):
             flag = True
 
-
     # check if year is number and if it has 4 digits or less
     # Allowing very old books, eg from the year: 989
     year = input(' Enter Year:')
@@ -83,15 +75,13 @@ def add_book():
     # Append new object Book to the list of books
     list_of_book.append(new_book)
     print(new_book)
-    print(BOOK_ADDED)
+    print(f' Book Added Successfully')
 
 
 # [2] Borrow Book
 def borrow_book():
     get_page_title('Borrow Book')
     # get book index first get_book_index
-
-
     flag_b, flag_u = False, False
     b_index = []
     while not flag_b:
@@ -116,7 +106,7 @@ def borrow_book():
         # Get the user
         search_index = input(f' To borrow the book {list_of_book[b_index[2]].get_title()},\n'
                              f' Enter user ID')
-        u_index =  get_user_index(search_index)
+        u_index = get_user_index(search_index)
 
         if u_index != '':
             # Borrow book
@@ -135,13 +125,14 @@ def delete_book():
     get_page_title('Delete Book')
 
     if list_of_book:
-        search_book = input(' === TIP --> Deletion is done by book ID, if you do not know the book ID, press x to exit and chose option 4 from the menu to Display Books. ===\n'
-                   ' Enter Book ID to be deleted:')
+        search_book = input(f' === TIP --> Deletion is done by book ID, if you do not know the book ID, press x to'
+                            f' exit and chose option 4 from the menu to Display Books. ===\n'
+                            f' Enter Book ID to be deleted:')
 
         while not search_book.isdigit() and search_book.lower() != 'x':
-            search_book = input(
-                ' === TIP --> Deletion is done by book ID, if you do not know the book ID, press x to exit and chose option 4 from the menu to Display Books. ===\n'
-                ' Enter Book ID to be deleted:')
+            search_book = input(f' === TIP --> Deletion is done by book ID, if you do not know the book ID, '
+                                f'press x to exit and choose option 4 from the menu to Display Books. ===\n'
+                                f' Enter Book ID to be deleted:')
 
         if search_book.lower() != 'x':
             # Call method to get the user index in the list of users
@@ -153,7 +144,8 @@ def delete_book():
 
                     # While user does not enter y or n, while loop keeps going
                     while delete.lower() not in ('y', 'n', 'x'):
-                        delete = input(f' Option invalid.\n Please to delete A book {list_of_book[book_index].get_title()} enter [Y or N]')
+                        delete = input(f' Option invalid.\n Please to delete A book '
+                                       f'{list_of_book[book_index].get_title()} enter [Y or N]')
 
                     if delete.lower() == 'y':
                         print(f' Book {list_of_book[book_index].get_title()} Deleted Successfully')
@@ -164,7 +156,7 @@ def delete_book():
                 print(f' Book Index not found')
 
     else:
-        print(USER_EMPTY)
+        print(' *** There is no user in the System, start adding some ***')
 
 
 # [4] Display Books
@@ -185,7 +177,7 @@ def return_book():
     while not flag_u:
         # Get the user
         search_index = input(f' Enter User ID to Return:')
-        u_index =  get_user_index(search_index)
+        u_index = get_user_index(search_index)
 
         print(f'[{u_index}]')
 
@@ -217,17 +209,6 @@ def return_book():
     print(f' Book returned successfully')
 
 
-
-
-
-
-
-
-
-
-
-
-
 # [6] Search Book
 def search_book():
     get_page_title('Search Book')
@@ -244,7 +225,7 @@ def search_book():
             list_of_books_found.append(str(b))
 
     if not list_of_books_found:
-        print(BOOK_NOT_FOUND)
+        print(f' Book Not Found')
     else:
         for b in list_of_books_found:
             print(b)
@@ -257,15 +238,6 @@ def search_book():
     print(f' The total of: {total} {place_holder} found with the keyword [{to_search.upper()}]')
 
 
-
-
-
-
-
-
-
-
-
 # [7] Add User
 def add_user():
     get_page_title('Add User')
@@ -276,7 +248,7 @@ def add_user():
     name_reg = "^[A-Za-z ]*[A-Za-z][A-Za-z ]*$"
     flag = False
     name = input(f' TIP >>> Only Letters and spaces are allowed.\n Enter Name:')
-    if check_string(name,name_reg):
+    if check_string(name, name_reg):
         flag = True
 
     while not flag:
@@ -300,7 +272,7 @@ def add_user():
 
     list_users.append(new_user)
     print(new_user)
-    print(USER_ADDED)
+    print(f' User Added Successfully')
 
 
 # [8] Delete USer
@@ -308,13 +280,14 @@ def delete_user():
     get_page_title('Delete User')
 
     if list_users:
-        user_id = input(' === TIP --> Deletion is done by USer ID, if you do not know the user ID, press x to exit and chose option 9 from the menu to search the User ID. ===\n'
-                   ' Enter User ID to be deleted:')
+        user_id = input(f' === TIP --> Deletion is done by USer ID, if you do not know the user ID, press x to exit'
+                        f' and choose option 9 from the menu to search the User ID. ===\n'
+                        f' Enter User ID to be deleted:')
 
         while not user_id.isdigit() and user_id.lower() != 'x':
-            user_id = input(
-                ' === TIP --> Deletion is done by USer ID, if you do not know the user ID, press x to exit and chose option 9 from the menu to search the User ID. ===\n'
-                ' Enter User ID to be deleted:')
+            user_id = input(f' === TIP --> Deletion is done by USer ID, if you do not know the user ID, press x to '
+                            f'exit and choose option 9 from the menu to search the User ID. ===\n'
+                            f' Enter User ID to be deleted:')
 
         if user_id.lower() != 'x':
             # Call method to get the user index in the list of users
@@ -327,7 +300,8 @@ def delete_user():
 
                     # While user does not enter y or n, while loop keeps going
                     while delete.lower() not in ('y', 'n', 'x'):
-                        delete = input(f' Option invalid.\n Please to delete User {list_users[user_index].get_name()} enter [Y or N]')
+                        delete = input(f' Option invalid.\n Please to delete User '
+                                       f'{list_users[user_index].get_name()} enter [Y or N]')
 
                     if delete.lower() == 'y':
                         print(f' User {list_users[user_index].get_name()} Deleted Successfully')
@@ -339,7 +313,7 @@ def delete_user():
                 print(f' User ID not found')
 
     else:
-        print(USER_EMPTY)
+        print(f' *** There is no user in the System, start adding some ***')
 
 
 # [9] Display Users
@@ -350,7 +324,7 @@ def display_users():
         for u in list_users:
             print(f'{u}\n')
     else:
-        print(USER_EMPTY)
+        print(f' *** There is no user in the System, start adding some ***')
 
 
 # [10] Search User
@@ -358,18 +332,18 @@ def search_user():
     get_page_title('Search User')
 
     if list_users:
-        search_user = input(' === TIP --> You can search User by ID, Name or Address. ==='
-                          '\n Please Enter a user data to be search:')
+        search_user = input(f' === TIP --> You can search User by ID, Name or Address. ===\n'
+                            f' Please Enter a user data to be search:')
 
         list_of_users_found = []
         for u in list_users:
             if search_user.lower() in str(u.get_name()).lower() \
                     or search_user.lower() in str(u.get_id()).lower() \
                     or search_user.lower() in str(u.get_address()).lower():
-                        list_of_users_found.append(str(u))
+                    list_of_users_found.append(str(u))
 
         if not list_of_users_found:
-            print(USER_NOT_FOUND)
+            print(f' User Not Found')
         else:
             for u in list_of_users_found:
                 print(f'{u}')
@@ -382,29 +356,7 @@ def search_user():
         print(f' The total of: {total} {place_holder} found with the keyword [{search_user.upper()}]')
 
     else:
-        print(USER_EMPTY)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        print(f' *** There is no user in the System, start adding some ***')
 
 
 # [11] Add Periodical
@@ -417,7 +369,7 @@ def add_periodical():
     editor_reg = "^[A-Za-z ]*[A-Za-z][A-Za-z ]*$"
     flag = False
     editor = input(f' TIP >>> Only Letters and spaces are allowed.\n Enter Editor:')
-    if check_string(editor,editor_reg):
+    if check_string(editor, editor_reg):
         flag = True
 
     while not flag:
@@ -441,10 +393,9 @@ def add_periodical():
         volume = input(' Try Again, Enter Volume number:')
 
     issue = input(f' TIP >>> Issue can have max. 6 digits\n'
-                   f' Enter Issue:')
+                  f' Enter Issue:')
     while not issue.isdigit() or len(issue) > 6:
         issue = input(f' Try Again, Enter Issue number:')
-
 
     # Use the latest ID and add 1 to it, e.g 10 + 1 = 11 < new ID to be used.
     new_periodical = Periodical(str(int(last_id) + 1), title, year, editor, volume, issue)
@@ -452,7 +403,6 @@ def add_periodical():
     list_of_periodical.append(new_periodical)
     print(new_periodical)
     print(f' User Added Successfully')
-
 
 
 # [12] Delete Periodical
@@ -479,7 +429,8 @@ def delete_periodical():
 
                 # While user does not enter y or n, while loop keeps going
                 while delete.lower() not in ('y', 'n', 'x'):
-                    delete = input(f' Option invalid.\n Please to delete Periodical {list_of_periodical[p_index].get_title()} enter [Y or N]')
+                    delete = input(f' Option invalid.\n Please to delete Periodical '
+                                   f'{list_of_periodical[p_index].get_title()} enter [Y or N]')
 
                 if delete.lower() == 'y':
                     print(f' Periodical {list_of_periodical[p_index].get_title()} Deleted Successfully')
@@ -494,17 +445,6 @@ def delete_periodical():
         print(f' *** There is no Periodical in the System, start adding some ***')
 
 
-
-
-
-
-
-
-
-
-
-
-
 # [13] Display Periodicals
 def display_periodicals():
     get_page_title('Display Periodicals')
@@ -515,12 +455,14 @@ def display_periodicals():
     else:
         print(' *** There is no periodical in the System, start adding some ***')
 
+
 # [14] Search Periodical
 def search_periodical():
     get_page_title('Search Periodical')
     if list_of_periodical:
-        search_periodical = input(' === TIP --> You can search Periodical by ID, Editor, Title, Volume, Year or Issue. ==='
-                          '\n Please Enter a periodical data to be search:')
+        search_periodical = input(f' === TIP --> You can search Periodical by ID, Editor, Title, Volume, '
+                                  f'Year or Issue. ==='
+                                  f'\n Please Enter a periodical data to be search:')
 
         list_of_periodicals_found = []
         for p in list_of_periodical:
@@ -546,7 +488,6 @@ def search_periodical():
         print(f' The total of: {total} {place_holder} found with the keyword [{search_periodical.upper()}]')
     else:
         print(f' Periodical Not Found')
-
 
 
 def menu_control():
@@ -618,6 +559,7 @@ def menu_control():
 
         display_menu()
         opt = input(' Please enter a option:')
+
 
 display_menu()
 menu_control()

@@ -1,5 +1,6 @@
 from Items import *
 
+
 # Print the title of the pager where the user is navigating.
 def get_page_title(page_title):
     print(' ' + page_title + '\n ' + len(page_title) * '=')
@@ -40,8 +41,9 @@ def get_periodical_last_id():
     # Return the last value of the list, which is the highest number.
     return list_of_ids[-1]
 
+
 # Get the latest ID used
-def get_user_last_id(choice=None):
+def get_user_last_id():
 
     if list_users:
         list_of_ids = []
@@ -57,6 +59,7 @@ def get_user_last_id(choice=None):
     # Return the last value of the list, which is the highest number.
     return list_of_ids[-1]
 
+
 # Return a list with all ISBN in the Library
 def get_isbns():
     list_isbn = []
@@ -67,15 +70,16 @@ def get_isbns():
 
 
 # Check if ISBN is already in use for another book, returns True/False
-def check_isbn(list_isbn,  check_isbn):
+def check_isbn(list_isbn, check_isbn):
     if check_isbn in list_isbn:
         return True
     return False
 
+
 def check_book_available(search_book):
     rc = ['No', ' Book not in the system', '']
     for b in list_of_book:
-        if b.get_item_id() == search_book :
+        if b.get_item_id() == search_book:
 
             if b.get_on_loan() != 'No':
                 rc = ['No', ' Book Already Borrowed\n Try again', '']
@@ -84,9 +88,8 @@ def check_book_available(search_book):
 
     return rc
 
+
 def get_user_index(user_id):
-    #u = input('Enter user ID who wants to borrow a book:')
-    # do A while loop ????
     get_user_index = ''
     for u in list_users:
         if u.get_id() == user_id:
@@ -103,6 +106,7 @@ def get_book_index(book_id):
 
     return get_index
 
+
 def get_periodical_index(periodical_id):
     get_index = ''
     for b in list_of_periodical:
@@ -111,14 +115,17 @@ def get_periodical_index(periodical_id):
 
     return get_index
 
+
 def check_del_user(user_index):
     # If user has any book borrowed, we can not delete it.
     if list_users[user_index].get_book_on_loan():
         rc = False
-        print(f' User can not be Deleted. User needs do bring back the following book: {list_users[user_index].get_book_on_loan()}')
+        print(f' User can not be Deleted. User needs do bring back the following book: '
+              f'{list_users[user_index].get_book_on_loan()}')
     else:
         rc = True
     return rc
+
 
 def check_del_book(book_index):
     # If any book is borrowed, we can not delete it.
@@ -126,7 +133,8 @@ def check_del_book(book_index):
     if list_of_book[book_index].get_on_loan() != 'No':
         rc = False
         print(f' Book can not be Deleted.\n'
-              f' The User {list_of_book[book_index].get_on_loan()} needs do bring it back before delete the book from the system')
+              f' The User {list_of_book[book_index].get_on_loan()} needs do bring it back before delete the'
+              f' book from the system')
     else:
         rc = True
     return rc
